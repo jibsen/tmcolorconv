@@ -64,7 +64,7 @@ class WhitePoint(collections.namedtuple('WhitePoint', 'X Y Z')):
         return cls(X, Y, Z)
 
 
-ColorSpace = collections.namedtuple('ColorSpace', 'r g b wp gamma')
+ColorSpace = collections.namedtuple('ColorSpace', 'r g b wp tf')
 
 
 class SimpleCompander:
@@ -111,9 +111,9 @@ GAMMA18 = 461 / 256.0
 GAMMA22 = 563 / 256.0
 
 # Color component transfer functions (companding)
-cmp_g18 = SimpleCompander(GAMMA18)
-cmp_g22 = SimpleCompander(GAMMA22)
-cmp_sRGB = sRGBCompander()
+tf_g18 = SimpleCompander(GAMMA18)
+tf_g22 = SimpleCompander(GAMMA22)
+tf_sRGB = sRGBCompander()
 
 # Primaries
 
@@ -146,23 +146,23 @@ prim_Trinitron = (Chromaticity(0.625, 0.34),
 AdobeRGB = ColorSpace(*prim_AdobeRGB,
                       wp=D65,
                       # wp=WhitePoint.from_xy(0.3127, 0.3290),
-                      gamma=GAMMA22)
+                      tf=tf_g22)
 
 AppleRGB = ColorSpace(*prim_Trinitron,
                       wp=D65,
-                      gamma=GAMMA18)
+                      tf=tf_g18)
 
 # https://developer.apple.com/library/mac/qa/qa1430/_index.html
 GenericRGB = ColorSpace(*prim_P22_alt,
                         wp=D65,
-                        gamma=GAMMA18)
+                        tf=tf_g18)
 
 # https://en.wikipedia.org/wiki/SRGB
 # The sRGB spec white point is 0.3127, 0.3290, we use D65 to match Lindbloom.
 sRGB = ColorSpace(*prim_HDTV_709,
                   wp=D65,
                   # wp=WhitePoint.from_xy(0.3127, 0.3290),
-                  gamma=2.2)
+                  tf=tf_sRGB)
 
 
 # Matrix computations (yes, numpy is a lot faster)
