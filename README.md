@@ -5,7 +5,7 @@ tmTheme Color Convert
 These are Python scripts I wrote while working on a blog post about the
 effects of color management on themes in text editors.
 
-Many [TextMate](http://macromates.com/) color schemes were designed on Mac
+Many [TextMate](http://macromates.com/) color themes were designed on Mac
 OS X, which used the Generic RGB color profile and a gamma of 1.8 by default.
 
 For portability and compatibility with other editors and operating systems,
@@ -19,7 +19,7 @@ background colors.
 Usage
 -----
 
-The script is written for Python 3.
+The scripts are written for Python 3.
 
 `tmcolorconv.py` takes a tmTheme file and changes the color values from
 Generic RGB to sRGB. A gamma value to be used for the original file can be
