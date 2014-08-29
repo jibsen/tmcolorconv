@@ -53,11 +53,13 @@ import plistlib
 import re
 
 
+# Generated using mkconvmatrix.py
 GenericRGBtosRGB = [[1.0252482, -0.0265428, 0.0012946],
                     [0.0193970, 0.9480316, 0.0325715],
                     [-0.0017702, -0.0014426, 1.0032129]]
 
 
+# Matrix computations (yes, numpy is a lot faster)
 def mat_c_mul(M, c):
     """Multiply matrix by constant."""
     return [[a * c for a in r] for r in M]
@@ -75,7 +77,7 @@ def mat_mat_mul(M1, M2):
 
 
 def mat3_inv(M):
-    """Compute the inverse of a 3x3 matrix."""
+    """Compute inverse of 3x3 matrix."""
     adjM = [[None, None, None] for _ in range(3)]
 
     # Compute the adjugate of M
@@ -136,7 +138,7 @@ def convert_color(Vin, gamma=2.2):
     v_srgb = mat_vec_mul(GenericRGBtosRGB, v)
 
     # sRGB companding
-    Vout = map(sRGB_compand, v_srgb)
+    Vout = list(map(sRGB_compand, v_srgb))
 
     return Vout
 

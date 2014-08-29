@@ -40,6 +40,30 @@ import math
 import operator
 
 
+class Chromaticity(collections.namedtuple('Chromaticity', 'x y')):
+    __slots__ = ()
+
+    @classmethod
+    def from_XYZ(cls, X, Y, Z):
+        x = X / (X + Y + Z)
+        y = Y / (X + Y + Z)
+        return cls(x, y)
+
+
+class WhitePoint(collections.namedtuple('WhitePoint', 'X Y Z')):
+    __slots__ = ()
+
+    @classmethod
+    def from_xy(cls, x, y):
+        X = x / y
+        Y = 1.0
+        Z = (1.0 - x - y) / y
+        return cls(X, Y, Z)
+
+
+ColorSpace = collections.namedtuple('ColorSpace', 'r g b wp gamma')
+
+
 class SimpleCompander:
     def __init__(self, gamma):
         self._gamma = gamma
@@ -65,30 +89,6 @@ class sRGBCompander:
             return math.pow((c + 0.055) / 1.055, 2.4)
 
 
-class Chromaticity(collections.namedtuple('Chromaticity', 'x y')):
-    __slots__ = ()
-
-    @classmethod
-    def from_XYZ(cls, X, Y, Z):
-        x = X / (X + Y + Z)
-        y = Y / (X + Y + Z)
-        return cls(x, y)
-
-
-class WhitePoint(collections.namedtuple('WhitePoint', 'X Y Z')):
-    __slots__ = ()
-
-    @classmethod
-    def from_xy(cls, x, y):
-        X = x / y
-        Y = 1.0
-        Z = (1.0 - x - y) / y
-        return cls(X, Y, Z)
-
-
-ColorSpace = collections.namedtuple('ColorSpace', 'r g b wp gamma')
-
-
 # White points
 # https://en.wikipedia.org/wiki/Standard_illuminant
 
@@ -104,58 +104,59 @@ D65 = WhitePoint(0.95047, 1.0, 1.08883)
 D65ICC = WhitePoint(62289 / 65536.0, 1.0, 71372 / 65536.0)
 D65CIE = WhitePoint(0.9504, 1.0, 1.0889)
 
-Gamma22 = 563 / 256.0
-Gamma18 = 461 / 256.0
+GAMMA18 = 461 / 256.0
+GAMMA22 = 563 / 256.0
 
 # Color component transfer functions (companding)
-Cmp18 = SimpleCompander(Gamma18)
-Cmp22 = SimpleCompander(Gamma22)
-CmpsRGB = sRGBCompander
+cmp_g18 = SimpleCompander(GAMMA18)
+cmp_g22 = SimpleCompander(GAMMA22)
+cmp_sRGB = sRGBCompander()
 
 # Primaries
-Prim_AdobeRGB = (Chromaticity(0.64, 0.33),
+
+prim_AdobeRGB = (Chromaticity(0.64, 0.33),
                  Chromaticity(0.21, 0.71),
                  Chromaticity(0.15, 0.06))
 
-Prim_HDTV_709 = (Chromaticity(0.64, 0.33),
+prim_HDTV_709 = (Chromaticity(0.64, 0.33),
                  Chromaticity(0.3, 0.6),
                  Chromaticity(0.15, 0.06))
 
-Prim_P22_EBU = (Chromaticity(0.63, 0.34),
+prim_P22_EBU = (Chromaticity(0.63, 0.34),
                 Chromaticity(0.295, 0.605),
                 Chromaticity(0.15, 0.075))
 
 # Generic RGB uses this slightly different version of P22
-Prim_P22_alt = (Chromaticity(0.63, 0.34),
+prim_P22_alt = (Chromaticity(0.63, 0.34),
                 Chromaticity(0.295, 0.605),
                 Chromaticity(0.155, 0.077))
 
-Prim_Trinitron = (Chromaticity(0.625, 0.34),
+prim_Trinitron = (Chromaticity(0.625, 0.34),
                   Chromaticity(0.28, 0.595),
                   Chromaticity(0.155, 0.07))
 
 # RGB color spaces
+
 # Using white point D65 gives the conversion matrices of Lindbloom/Pascale,
 # whereas using 0.3127, 0.3290 as in the AdobeRGB spec gives theirs.
 # https://www.adobe.com/digitalimag/pdfs/AdobeRGB1998.pdf
-AdobeRGB = ColorSpace(*Prim_AdobeRGB,
+AdobeRGB = ColorSpace(*prim_AdobeRGB,
                       wp=D65,
                       # wp=WhitePoint.from_xy(0.3127, 0.3290),
-                      gamma=Gamma22)
+                      gamma=GAMMA22)
 
-AppleRGB = ColorSpace(*Prim_Trinitron,
+AppleRGB = ColorSpace(*prim_Trinitron,
                       wp=D65,
-                      gamma=Gamma18)
+                      gamma=GAMMA18)
 
 # https://developer.apple.com/library/mac/qa/qa1430/_index.html
-GenericRGB = ColorSpace(*Prim_P22_alt,
+GenericRGB = ColorSpace(*prim_P22_alt,
                         wp=D65,
-                        gamma=Gamma18)
+                        gamma=GAMMA18)
 
 # https://en.wikipedia.org/wiki/SRGB
-# The sRGB spec white point is 0.3127, 0.3290, we use D65 above to match
-# Lindbloom.
-sRGB = ColorSpace(*Prim_HDTV_709,
+# The sRGB spec white point is 0.3127, 0.3290, we use D65 to match Lindbloom.
+sRGB = ColorSpace(*prim_HDTV_709,
                   wp=D65,
                   # wp=WhitePoint.from_xy(0.3127, 0.3290),
                   gamma=2.2)
