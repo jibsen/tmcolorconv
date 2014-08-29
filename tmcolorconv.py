@@ -195,10 +195,6 @@ def convert_scheme(scheme, gamma, blend_alpha):
                     elif k == 'background':
                         bg = color
 
-                # res = subprocess.check_output('convert.exe -depth 8 xc:' + color_to_hex(color) + ' -profile GenericRGB.icc -profile sRGB.icc txt:', universal_newlines=True)
-                # match2 = re.search('(#[0-9a-fA-F]{6})', res)
-                # scheme['settings'][idx]['settings'][k] = match2.group(0)
-
                 # Update hex color in scheme
                 color_str = color_to_hex(convert_color(color, gamma))
                 color_str += alpha_str or ''
