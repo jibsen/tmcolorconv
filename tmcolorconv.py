@@ -21,7 +21,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 """
-Convert tmTheme from Generic RGB to sRGB.
+Convert tmTheme colors from Generic RGB to sRGB.
 
 Many TextMate color themes were designed on Mac OS X, which used the Generic
 RGB color profile by default (though apparently unmanaged applications get
@@ -42,7 +42,8 @@ background colors.
 The blending assumes that the foreground and background keys come before any
 other keys that contain alpha.
 
-Note: Uses plistlib interface introduced in Python 3.4.
+Note:
+    Uses plistlib interface introduced in Python 3.4.
 """
 
 import argparse
@@ -144,7 +145,17 @@ def convert_color(Vin, gamma=2.2):
 
 
 def convert_scheme(scheme, gamma, blend_alpha):
-    """Convert colors in scheme from Generic RGB to sRGB."""
+    """Convert colors in scheme from Generic RGB to sRGB.
+
+    Args:
+        scheme: tmTheme loaded through plistlib.
+        gamma (float): Gamma value of colors.
+        blend_alpha (bool): If True, colors with alpha are blended, otherwise
+            the alpha value is copied.
+
+    Returns:
+        Converted scheme.
+    """
     bg = [0, 0, 0]
     fg = [0, 0, 0]
 

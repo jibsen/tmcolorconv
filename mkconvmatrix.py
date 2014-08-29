@@ -21,9 +21,12 @@
 # DEALINGS IN THE SOFTWARE.
 
 """
-Make RGB working space conversion matrices.
+Functionality for making RGB working space conversion matrices.
 
-This is a playground, not a product.
+This code was written while working on a post about how color management
+affects color themes for text editors.
+
+Some useful resources:
 
 http://www.brucelindbloom.com/
 http://www.babelcolor.com/download/A%20review%20of%20RGB%20color%20spaces.pdf
@@ -31,8 +34,8 @@ http://www.marcelpatek.com/color.html
 http://ninedegreesbelow.com/photography/articles.html
 http://www.ryanjuckett.com/programming/rgb-color-space-conversion/
 
-convert -depth 8 xc:#272822 -profile GenericRGB.icc
-        -write txt: -profile sRGB.icc txt:
+Warning:
+    This is a playground, not a product.
 """
 
 import collections
@@ -180,7 +183,7 @@ def mat_mat_mul(M1, M2):
 
 
 def mat3_inv(M):
-    """Compute the inverse of a 3x3 matrix."""
+    """Compute inverse of 3x3 matrix."""
     adjM = [[None, None, None] for _ in range(3)]
 
     # Compute the adjugate of M
@@ -199,7 +202,14 @@ def mat3_inv(M):
 
 
 def make_cs_to_XYZ_matrix(cs):
-    """Make a matrix to convert from ColorSpace cs to XYZ."""
+    """Compute matrix to convert from color space cs to XYZ.
+
+    Args:
+        cs (ColorSpace): Source color space.
+
+    Returns:
+        Conversion matrix.
+    """
 
     # If we have the primaries in XYZ instead, we can use this shorter
     # computation:
@@ -236,7 +246,15 @@ def make_cs_to_XYZ_matrix(cs):
 
 
 def make_bfd_matrix(ws, wd):
-    """Make a Bradford chromatic adaption transform matrix."""
+    """Compute Bradford chromatic adaption transform matrix.
+
+    Args:
+        ws (WhitePoint): Source white point (XYZ).
+        wd (WhitePoint): Destination white point (XYZ).
+
+    Returns:
+        Chromatic adapation matrix.
+    """
 
     # Bradford cone response matrix
     Bradford_crm = [[0.8951, 0.2664, -0.1614],
