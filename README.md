@@ -37,7 +37,7 @@ foreground/background color instead of copied.
     optional arguments:
       -h, --help            show this help message and exit
       -g GAMMA, --gamma GAMMA
-                            input gamma (default 2.2)
+                            input gamma (default 1.8)
       -b                    blend alpha
 
 `mkconvmatrix.py` is a playground for working with color space conversions. It

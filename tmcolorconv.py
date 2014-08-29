@@ -209,8 +209,8 @@ if __name__ == '__main__':
                         help='input tmTheme file')
     parser.add_argument('outfile', type=argparse.FileType('wb'),
                         help='output tmTheme file')
-    parser.add_argument('-g', '--gamma', type=float, default=2.2,
-                        help='input gamma (default 2.2)')
+    parser.add_argument('-g', '--gamma', type=float, default=1.8,
+                        help='input gamma (default 1.8)')
     parser.add_argument('-b', action='store_true',
                         help='blend alpha')
     args = parser.parse_args()
