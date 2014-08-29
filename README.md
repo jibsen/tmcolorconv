@@ -44,6 +44,30 @@ foreground/background color instead of copied.
 was used to compute the `GenericRGBtosRGB` matrix used in `tmcolorconv.py`.
 
 
+Examples
+--------
+
+These screenshots show the themes from the examples folder in
+[Sublime Text 3][Sublime] on Windows.
+
+Original and sRGB version of [Monokai][]:
+
+![Monokai](examples/monokai_compare.png)
+
+Original and sRGB version of [Tomorrow Night][Tomorrow]:
+
+![Tomorrow Night](examples/tomorrow_compare.png)
+
+Original and sRGB version of [Twilight][]:
+
+![Twilight](examples/twilight_compare.png)
+
+[Sublime]: http://www.sublimetext.com/
+[Monokai]: http://www.monokai.nl/blog/2006/07/15/textmate-color-theme/
+[Tomorrow]: https://github.com/chriskempson/tomorrow-theme
+[Twilight]: https://github.com/textmate/themes.tmbundle
+
+
 License
 -------
 
