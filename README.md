@@ -7,6 +7,7 @@ effects of color management on themes in text editors.
 
 Many [TextMate](http://macromates.com/) color themes were designed on Mac
 OS X, which used the Generic RGB color profile and a gamma of 1.8 by default.
+This results in the colors being darker if used directly on Windows.
 
 For portability and compatibility with other editors and operating systems,
 it is better to use sRGB.
