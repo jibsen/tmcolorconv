@@ -96,7 +96,7 @@ def mat3_inv(M):
     return mat_c_mul(adjM, 1 / det)
 
 
-def hex_to_color(s):
+def str_to_color(s):
     """Convert hex string to color value."""
     if len(s) == 3:
         s = ''.join(c + c for c in s)
@@ -107,7 +107,7 @@ def hex_to_color(s):
     return [c / 255.0 for c in values]
 
 
-def color_to_hex(C):
+def color_to_str(C):
     """Convert color value to hex string."""
     # Scale from [0-1] to [0-255]
     V = [int(round(c * 255)) for c in C]
@@ -174,7 +174,7 @@ def convert_scheme(scheme, gamma, blend_alpha):
                 match = re.match('#([0-9a-fA-F]{3})', v)
 
             if match:
-                color = hex_to_color(match.group(1))
+                color = str_to_color(match.group(1))
 
                 alpha_str = match.group(2)
 
@@ -196,7 +196,7 @@ def convert_scheme(scheme, gamma, blend_alpha):
                         bg = color
 
                 # Update hex color in scheme
-                color_str = color_to_hex(convert_color(color, gamma))
+                color_str = color_to_str(convert_color(color, gamma))
                 color_str += alpha_str or ''
                 scheme['settings'][idx]['settings'][k] = color_str
 
