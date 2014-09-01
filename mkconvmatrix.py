@@ -94,18 +94,14 @@ class sRGBCompander:
 
 # White points
 # https://en.wikipedia.org/wiki/Standard_illuminant
+# ASTM E308-01
+# ICC values from http://www.color.org/ICC_Minor_Revision_for_Web.pdf
 
-# D50 ICC spec: 0.9642, 1.0, 0.8249
-# http://www.color.org/ICC_Minor_Revision_for_Web.pdf
-# ICC profiles contain 63190 / 65536, 1.0, 54061 / 65536
 D50 = WhitePoint(0.96422, 1.0, 0.82521)
-D50ICC = WhitePoint(63190 / 65536.0, 1.0, 54061 / 65536.0)
-D50CIE = WhitePoint(0.9642, 1.0, 0.8249)
+D50ICC = WhitePoint(0.9642, 1.0, 0.8249)
 
-# ICC profiles contain 62289 / 65536, 1.0, 71372 / 65536
 D65 = WhitePoint(0.95047, 1.0, 1.08883)
-D65ICC = WhitePoint(62289 / 65536.0, 1.0, 71372 / 65536.0)
-D65CIE = WhitePoint(0.9504, 1.0, 1.0889)
+D65ICC = WhitePoint(0.9505, 1.0, 1.0890)
 
 GAMMA18 = 461 / 256.0
 GAMMA22 = 563 / 256.0
