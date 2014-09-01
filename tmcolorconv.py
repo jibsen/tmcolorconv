@@ -131,7 +131,7 @@ def sRGB_compand(c):
         return 1.055 * math.pow(c, 1 / 2.4) - 0.055
 
 
-def convert_color(Vin, gamma=2.2):
+def convert_color(Vin, gamma):
     """Convert color Vin from Generic RGB to sRGB."""
     # Linearize
     v = [math.pow(c, gamma) for c in Vin]
