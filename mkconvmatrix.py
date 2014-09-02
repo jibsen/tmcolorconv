@@ -103,10 +103,11 @@ D50ICC = WhitePoint(0.9642, 1.0, 0.8249)
 D65 = WhitePoint(0.95047, 1.0, 1.08883)
 D65ICC = WhitePoint(0.9505, 1.0, 1.0890)
 
+# Color component transfer functions (companding)
+
 GAMMA18 = 461 / 256.0
 GAMMA22 = 563 / 256.0
 
-# Color component transfer functions (companding)
 tf_g18 = SimpleCompander(GAMMA18)
 tf_g22 = SimpleCompander(GAMMA22)
 tf_sRGB = sRGBCompander()
