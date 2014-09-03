@@ -258,8 +258,8 @@ def make_bfd_matrix(ws, wd):
                     [-0.7502, 1.7135, 0.0367],
                     [0.0389, -0.0685, 1.0296]]
 
-    Cs = mat_vec_mul(Bradford_crm, [ws.X, ws.Y, ws.Z])
-    Cd = mat_vec_mul(Bradford_crm, [wd.X, wd.Y, wd.Z])
+    Cs = mat_vec_mul(Bradford_crm, ws)
+    Cd = mat_vec_mul(Bradford_crm, wd)
 
     T = [[Cd[0] / Cs[0], 0.0, 0.0],
          [0.0, Cd[1] / Cs[1], 0.0],
