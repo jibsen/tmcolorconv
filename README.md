@@ -11,12 +11,13 @@ it is better to use sRGB.
 
 This script will convert the color values in a tmTheme file from Generic RGB
 to sRGB, optionally applying simple alpha blending with the foreground and
-background colors.
+background colors (for TextMate 2 themes before [this change][blend]).
 
 I wrote this while working on a [blog post][post] about the effects of color
 management on themes in text editors.
 
 [post]: http://www.hardtoc.com/archives/310
+[blend]: https://github.com/textmate/textmate/commit/8e1aa09
 
 
 Usage
