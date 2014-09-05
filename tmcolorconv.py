@@ -56,8 +56,8 @@ import re
 
 # Generated using mkconvmatrix.py
 GenericRGBtosRGB = [[1.0252482, -0.0265428, 0.0012946],
-                    [0.0193970, 0.9480316, 0.0325715],
-                    [-0.0017702, -0.0014426, 1.0032129]]
+                    [0.0193970, 0.9480316, 0.0325714],
+                    [-0.0017702, -0.0014426, 1.0032128]]
 
 
 # Matrix computations (yes, numpy is a lot faster)
