@@ -207,17 +207,6 @@ def make_cs_to_XYZ_matrix(cs):
     Returns:
         Conversion matrix.
     """
-
-    # If we have the primaries in XYZ instead, we can use this shorter
-    # computation:
-    # Yr = Vr[1]
-    # Yg = Vg[1]
-    # Yb = Vb[1]
-    # Vur = [a / Yr for a in Vr]
-    # Vug = [a / Yg for a in Vg]
-    # Vub = [a / Yb for a in Vb]
-    # M = [r for r in zip(Vur, Vug, Vub)]
-
     Xr = cs.r.x / cs.r.y
     Yr = 1.0
     Zr = (1.0 - cs.r.x - cs.r.y) / cs.r.y
@@ -252,7 +241,6 @@ def make_bfd_matrix(ws, wd):
     Returns:
         Chromatic adapation matrix.
     """
-
     # Bradford cone response matrix
     Bradford_crm = [[0.8951, 0.2664, -0.1614],
                     [-0.7502, 1.7135, 0.0367],
