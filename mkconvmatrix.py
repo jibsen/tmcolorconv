@@ -201,32 +201,27 @@ def mat3_inv(M):
 def make_cs_to_XYZ_matrix(cs):
     """Compute matrix to convert from color space cs to XYZ.
 
+    Based on Foley et al.
+
     Args:
         cs (ColorSpace): Source color space.
 
     Returns:
         Conversion matrix.
     """
-    Xr = cs.r.x / cs.r.y
-    Yr = 1.0
-    Zr = (1.0 - cs.r.x - cs.r.y) / cs.r.y
+    zr = 1.0 - cs.r.x - cs.r.y
+    zg = 1.0 - cs.g.x - cs.g.y
+    zb = 1.0 - cs.b.x - cs.b.y
 
-    Xg = cs.g.x / cs.g.y
-    Yg = 1.0
-    Zg = (1.0 - cs.g.x - cs.g.y) / cs.g.y
-
-    Xb = cs.b.x / cs.b.y
-    Yb = 1.0
-    Zb = (1.0 - cs.b.x - cs.b.y) / cs.b.y
-
-    C = [[Xr, Xg, Xb], [Yr, Yg, Yb], [Zr, Zg, Zb]]
+    C = [[cs.r.x, cs.g.x, cs.b.x],
+         [cs.r.y, cs.g.y, cs.b.y],
+         [zr, zg, zb]]
 
     Cinv = mat3_inv(C)
 
-    S = mat_vec_mul(Cinv, cs.wp)
+    T = mat_vec_mul(Cinv, cs.wp)
 
-    # M = [list(map(operator.mul, S, r)) for r in C]
-    M = [[s * a for s, a in zip(S, r)] for r in C]
+    M = [list(map(operator.mul, r, T)) for r in C]
 
     return M
 
