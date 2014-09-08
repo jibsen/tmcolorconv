@@ -60,40 +60,9 @@ GenericRGBtosRGB = [[1.0252482, -0.0265428, 0.0012946],
                     [-0.0017702, -0.0014426, 1.0032128]]
 
 
-# Matrix computations (yes, numpy is a lot faster)
-def mat_c_mul(M, c):
-    """Multiply matrix by constant."""
-    return [[a * c for a in r] for r in M]
-
-
 def mat_vec_mul(M, v):
     """Multiply matrix by vector."""
     return [sum(map(operator.mul, r, v)) for r in M]
-
-
-def mat_mat_mul(M1, M2):
-    """Multiply matrix by matrix."""
-    M2T = list(zip(*M2))
-    return [mat_vec_mul(M2T, r) for r in M1]
-
-
-def mat3_inv(M):
-    """Compute inverse of 3x3 matrix."""
-    adjM = [[None, None, None] for _ in range(3)]
-
-    # Compute the adjugate of M
-    # Note: Indexing handles transposing and sign change (only works for 3x3)
-    for i in range(3):
-        i1 = (i + 1) % 3
-        i2 = (i + 2) % 3
-        for j in range(3):
-            j1 = (j + 1) % 3
-            j2 = (j + 2) % 3
-            adjM[j][i] = M[i1][j1] * M[i2][j2] - M[i1][j2] * M[i2][j1]
-
-    det = sum(M[0][i] * adjM[i][0] for i in range(3))
-
-    return mat_c_mul(adjM, 1 / det)
 
 
 def str_to_color(s):
