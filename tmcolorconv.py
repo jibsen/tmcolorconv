@@ -43,6 +43,11 @@ The blending assumes that the foreground and background keys come before any
 other keys that contain alpha.
 
 Note:
+    The conversion could include gamut mapping, but in practice the two color
+    spaces are so close that just clamping the resulting sRGB values works
+    fine.
+
+Note:
     Uses plistlib interface introduced in Python 3.4.
 """
 
