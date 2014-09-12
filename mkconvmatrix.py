@@ -251,30 +251,30 @@ def make_bfd_matrix(ws, wd):
     return mat_mat_mul(mat3_inv(Bradford_crm), mat_mat_mul(T, Bradford_crm))
 
 
-def point_in_triangle(p, r, g, b):
-    """Check if p is inside or on edge of triangle r, g, b."""
-    det = (g.y - b.y) * (r.x - b.x) + (b.x - g.x) * (r.y - b.y)
+def point_in_triangle(p, a, b, c):
+    """Check if p is inside or on edge of triangle a, b, c."""
+    det = (b.y - c.y) * (a.x - c.x) + (c.x - b.x) * (a.y - c.y)
 
-    u = ((g.y - b.y) * (p.x - b.x) + (b.x - g.x) * (p.y - b.y)) / det
-    v = ((b.y - r.y) * (p.x - b.x) + (r.x - b.x) * (p.y - b.y)) / det
+    u = ((b.y - c.y) * (p.x - c.x) + (c.x - b.x) * (p.y - c.y)) / det
+    v = ((c.y - a.y) * (p.x - c.x) + (a.x - c.x) * (p.y - c.y)) / det
 
     return u >= 0.0 and v >= 0.0 and (u + v) <= 1.0
 
 
-def barycentric_clamp(p, r, g, b):
-    """Clamp p to triangle r, g, b using barycentric coordinate system.
+def barycentric_clamp(p, a, b, c):
+    """Clamp p to triangle a, b, c using barycentric coordinate system.
 
     Convert p into area coordinates (barycentric coordinate system) of
-    triangle with corners r, g, b, and if p is outside, move it to a
+    triangle with corners a, b, c, and if p is outside, move it to a
     position on the edge "nearby".
 
     This process is not based on any color theory, but is an easy and fast
     way to clamp coordinates.
     """
-    det = (g.y - b.y) * (r.x - b.x) + (b.x - g.x) * (r.y - b.y)
+    det = (b.y - c.y) * (a.x - c.x) + (c.x - b.x) * (a.y - c.y)
 
-    u = ((g.y - b.y) * (p.x - b.x) + (b.x - g.x) * (p.y - b.y)) / det
-    v = ((b.y - r.y) * (p.x - b.x) + (r.x - b.x) * (p.y - b.y)) / det
+    u = ((b.y - c.y) * (p.x - c.x) + (c.x - b.x) * (p.y - c.y)) / det
+    v = ((c.y - a.y) * (p.x - c.x) + (a.x - c.x) * (p.y - c.y)) / det
     w = 1.0 - u - v
 
     if u < 0.0:
@@ -292,7 +292,7 @@ def barycentric_clamp(p, r, g, b):
         u /= u + v
         v = 1.0 - u
 
-    return [u * r.x + v * g.x + w * b.x, u * r.y + v * g.y + w * b.y]
+    return [u * a.x + v * b.x + w * c.x, u * a.y + v * b.y + w * c.y]
 
 
 def point_distance(p1, p2):
