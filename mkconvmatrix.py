@@ -251,6 +251,99 @@ def make_bfd_matrix(ws, wd):
     return mat_mat_mul(mat3_inv(Bradford_crm), mat_mat_mul(T, Bradford_crm))
 
 
+def point_in_triangle(p, r, g, b):
+    """Check if p is inside or on edge of triangle r, g, b."""
+    det = (g.y - b.y) * (r.x - b.x) + (b.x - g.x) * (r.y - b.y)
+
+    u = ((g.y - b.y) * (p.x - b.x) + (b.x - g.x) * (p.y - b.y)) / det
+    v = ((b.y - r.y) * (p.x - b.x) + (r.x - b.x) * (p.y - b.y)) / det
+
+    return u >= 0.0 and v >= 0.0 and (u + v) <= 1.0
+
+
+def barycentric_clamp(p, r, g, b):
+    """Clamp p to triangle r, g, b using barycentric coordinate system.
+
+    Convert p into area coordinates (barycentric coordinate system) of
+    triangle with corners r, g, b, and if p is outside, move it to a
+    position on the edge "nearby".
+
+    This process is not based on any color theory, but is an easy and fast
+    way to clamp coordinates.
+    """
+    det = (g.y - b.y) * (r.x - b.x) + (b.x - g.x) * (r.y - b.y)
+
+    u = ((g.y - b.y) * (p.x - b.x) + (b.x - g.x) * (p.y - b.y)) / det
+    v = ((b.y - r.y) * (p.x - b.x) + (r.x - b.x) * (p.y - b.y)) / det
+    w = 1.0 - u - v
+
+    if u < 0.0:
+        u = 0.0
+        v /= v + w
+        w = 1.0 - v
+
+    if v < 0.0:
+        v = 0.0
+        u /= u + w
+        w = 1.0 - u
+
+    if w < 0.0:
+        w = 0.0
+        u /= u + v
+        v = 1.0 - u
+
+    return [u * r.x + v * g.x + w * b.x, u * r.y + v * g.y + w * b.y]
+
+
+def point_distance(p1, p2):
+    dx = p1[0] - p2[0]
+    dy = p1[1] - p2[1]
+    return math.sqrt(dx * dx + dy * dy)
+
+
+def closest_point_on_line(p, a, b):
+    """Find closest point to p on line a, b."""
+    ablen = point_distance(a, b)
+
+    # Unit vector along a, b
+    abux = (b.x - a.x) / ablen
+    abuy = (b.y - a.y) / ablen
+
+    # Length of projection of a, p onto a, b
+    t = (p.x - a.x) * abux + (p.y - a.y) * abuy
+
+    if t < 0.0:
+        return a
+    elif t > ablen:
+        return b
+    else:
+        return [a.x + abux * t, a.y + abuy * t]
+
+
+def closest_point_on_triangle(p, a, b, c):
+    """Find closest point to p on edge of triangle a, b, c."""
+    p1 = closest_point_on_line(p, a, b)
+    p2 = closest_point_on_line(p, b, c)
+    p3 = closest_point_on_line(p, c, a)
+
+    d1 = point_distance(p, p1)
+    d2 = point_distance(p, p2)
+    d3 = point_distance(p, p3)
+
+    result = p1
+    dresult = d1
+
+    if d2 < dresult:
+        result = p2
+        dresult = d2
+
+    if d3 < dresult:
+        result = p3
+        dresult = d3
+
+    return result
+
+
 class RGBConverter:
     def __init__(self, src_cs, dst_cs):
         self.src = src_cs
