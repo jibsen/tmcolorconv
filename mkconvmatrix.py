@@ -290,9 +290,9 @@ class RGBConverter:
 
 
 if __name__ == '__main__':
-    M = make_bfd_matrix(D50, D65)
-    print('D50toD65:', M)
-    print('white:', mat_vec_mul(M, D50))
+    D50toD65 = make_bfd_matrix(D50, D65)
+    print('D50toD65:', D50toD65)
+    print('white:', mat_vec_mul(D50toD65, D50))
 
     M1 = make_cs_to_XYZ_matrix(GenericRGB)
     M2 = make_cs_to_XYZ_matrix(sRGB)
@@ -312,3 +312,18 @@ if __name__ == '__main__':
     print(conv.convert_hex('FF0000'))
     print(conv.convert_hex('00FF00'))
     print(conv.convert_hex('0000FF'))
+
+    # To get the primaries from a color profile, we must convert the rXYZ,
+    # gXYZ, bXYZ entries to chromaticities. This example converts the values
+    # from a sRGB profile. The values are stored relative to whitepoint D50,
+    # so we must adapt them.
+    rXYZ = [0.43606567, 0.22248840, 0.01391602]
+    gXYZ = [0.38514709, 0.71687317, 0.09707642]
+    bXYZ = [0.14306641, 0.06060791, 0.71409607]
+    r = mat_vec_mul(D50toD65, rXYZ)
+    g = mat_vec_mul(D50toD65, gXYZ)
+    b = mat_vec_mul(D50toD65, bXYZ)
+    print('sRGB color profile primaries converted to chromaticities:')
+    print('R 0.64 0.33:', Chromaticity.from_XYZ(*r))
+    print('G 0.30 0.60:', Chromaticity.from_XYZ(*g))
+    print('B 0.15 0.06:', Chromaticity.from_XYZ(*b))
