@@ -251,6 +251,44 @@ def make_bfd_matrix(ws, wd):
     return mat_mat_mul(mat3_inv(Bradford_crm), mat_mat_mul(T, Bradford_crm))
 
 
+class RGBConverter:
+    def __init__(self, src_cs, dst_cs):
+        self.src = src_cs
+        self.dst = dst_cs
+        self._src_to_XYZ = make_cs_to_XYZ_matrix(src_cs)
+        self._XYZ_to_dst = mat3_inv(make_cs_to_XYZ_matrix(dst_cs))
+        self._cat = None
+        if src_cs.wp != dst_cs.wp:
+            self._cat = make_bfd_matrix(src_cs.wp, dst_cs.wp)
+
+    def convert(self, C):
+        """Convert color C from src to dst colorspace."""
+        C = list(map(self.src.tf.linearize, C))
+
+        C = mat_vec_mul(self._src_to_XYZ, C)
+
+        if self._cat is not None:
+            C = mat_vec_mul(self._cat, C)
+
+        C = mat_vec_mul(self._XYZ_to_dst, C)
+
+        C = list(map(self.dst.tf.compand, C))
+
+        # Clamp values to [0-1]
+        C = [min(max(c, 0.0), 1.0) for c in C]
+
+        return C
+
+    def convert_hex(self, s):
+        C = [c / 255.0 for c in bytes.fromhex(s)]
+
+        C = self.convert(C)
+
+        C = [int(round(c * 255)) for c in C]
+
+        return '#{:02X}{:02X}{:02X}'.format(*C)
+
+
 if __name__ == '__main__':
     M = make_bfd_matrix(D50, D65)
     print('D50toD65:', M)
@@ -262,3 +300,15 @@ if __name__ == '__main__':
     print('GenericRGB to sRGB:', M)
     print('white:', mat_vec_mul(M, (1.0, 1.0, 1.0)))
     print('black:', mat_vec_mul(M, (0.0, 0.0, 0.0)))
+    print('75 gray:', mat_vec_mul(M, (0.75, 0.75, 0.75)))
+    print('M1 row sums :', [sum(r) for r in M1])
+    print('M2 row sums :', [sum(r) for r in M2])
+    print('M row sums :', [sum(r) for r in M])
+
+    conv = RGBConverter(GenericRGB, sRGB)
+
+    print(conv.convert_hex('272822'))
+    print(conv.convert_hex('F92672'))
+    print(conv.convert_hex('FF0000'))
+    print(conv.convert_hex('00FF00'))
+    print(conv.convert_hex('0000FF'))
