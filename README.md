@@ -58,6 +58,10 @@ Original and sRGB version of [Monokai][]:
 
 ![Monokai](examples/monokai_compare.png)
 
+Original and sRGB version of [Railscasts][]:
+
+![Railscasts](examples/railscasts_compare.png)
+
 Original and sRGB version of [Tomorrow Night][Tomorrow]:
 
 ![Tomorrow Night](examples/tomorrow_compare.png)
@@ -68,6 +72,7 @@ Original and sRGB version of [Twilight][]:
 
 [Sublime]: http://www.sublimetext.com/
 [Monokai]: http://www.monokai.nl/blog/2006/07/15/textmate-color-theme/
+[Railscasts]: http://railscasts.com/about
 [Tomorrow]: https://github.com/chriskempson/tomorrow-theme
 [Twilight]: https://github.com/textmate/themes.tmbundle
 
