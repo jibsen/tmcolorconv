@@ -253,10 +253,10 @@ def make_bfd_matrix(ws, wd):
 
 def point_in_triangle(p, a, b, c):
     """Check if p is inside or on edge of triangle a, b, c."""
-    det = (b.y - c.y) * (a.x - c.x) + (c.x - b.x) * (a.y - c.y)
+    det = (b[1] - c[1]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[1] - c[1])
 
-    u = ((b.y - c.y) * (p.x - c.x) + (c.x - b.x) * (p.y - c.y)) / det
-    v = ((c.y - a.y) * (p.x - c.x) + (a.x - c.x) * (p.y - c.y)) / det
+    u = ((b[1] - c[1]) * (p[0] - c[0]) + (c[0] - b[0]) * (p[1] - c[1])) / det
+    v = ((c[1] - a[1]) * (p[0] - c[0]) + (a[0] - c[0]) * (p[1] - c[1])) / det
 
     return u >= 0.0 and v >= 0.0 and (u + v) <= 1.0
 
@@ -271,10 +271,10 @@ def barycentric_clamp(p, a, b, c):
     This process is not based on any color theory, but is an easy and fast
     way to clamp coordinates.
     """
-    det = (b.y - c.y) * (a.x - c.x) + (c.x - b.x) * (a.y - c.y)
+    det = (b[1] - c[1]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[1] - c[1])
 
-    u = ((b.y - c.y) * (p.x - c.x) + (c.x - b.x) * (p.y - c.y)) / det
-    v = ((c.y - a.y) * (p.x - c.x) + (a.x - c.x) * (p.y - c.y)) / det
+    u = ((b[1] - c[1]) * (p[0] - c[0]) + (c[0] - b[0]) * (p[1] - c[1])) / det
+    v = ((c[1] - a[1]) * (p[0] - c[0]) + (a[0] - c[0]) * (p[1] - c[1])) / det
     w = 1.0 - u - v
 
     if u < 0.0:
@@ -292,7 +292,7 @@ def barycentric_clamp(p, a, b, c):
         u /= u + v
         v = 1.0 - u
 
-    return [u * a.x + v * b.x + w * c.x, u * a.y + v * b.y + w * c.y]
+    return [u * a[0] + v * b[0] + w * c[0], u * a[1] + v * b[1] + w * c[1]]
 
 
 def point_distance(p1, p2):
@@ -306,18 +306,18 @@ def closest_point_on_line(p, a, b):
     ablen = point_distance(a, b)
 
     # Unit vector along a, b
-    abux = (b.x - a.x) / ablen
-    abuy = (b.y - a.y) / ablen
+    abux = (b[0] - a[0]) / ablen
+    abuy = (b[1] - a[1]) / ablen
 
     # Length of projection of a, p onto a, b
-    t = (p.x - a.x) * abux + (p.y - a.y) * abuy
+    t = (p[0] - a[0]) * abux + (p[1] - a[1]) * abuy
 
     if t < 0.0:
         return a
     elif t > ablen:
         return b
     else:
-        return [a.x + abux * t, a.y + abuy * t]
+        return [a[0] + abux * t, a[1] + abuy * t]
 
 
 def closest_point_on_triangle(p, a, b, c):
