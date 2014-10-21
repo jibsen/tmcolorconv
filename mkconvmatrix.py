@@ -72,10 +72,10 @@ class SimpleCompander:
         self._gamma = gamma
 
     def compand(self, c):
-        return math.pow(c, 1.0 / self._gamma)
+        return math.pow(max(c, 0.0), 1.0 / self._gamma)
 
     def linearize(self, c):
-        return math.pow(c, self._gamma)
+        return math.pow(max(c, 0.0), self._gamma)
 
 
 class sRGBCompander:
