@@ -16,7 +16,7 @@ background colors (for TextMate 2 themes before [this change][blend]).
 I wrote this while working on a [blog post][post] about the effects of color
 management on themes in text editors.
 
-[post]: http://www.hardtoc.com/archives/310
+[post]: http://hardtoc.com/2014/09/03/not-quite-monokai.html
 [blend]: https://github.com/textmate/textmate/commit/8e1aa09
 
 
